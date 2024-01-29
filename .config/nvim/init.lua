@@ -1,0 +1,7 @@
+require('options')
+require('keybindings')
+require('autocommands')
+require('plugins')
+require('colorschemes')
+require('lsp')
+require('intro')

@@ -1,0 +1,17 @@
+; [diff]
+;     tool = vimdiff
+; [merge]
+;     tool = vimdiff
+; [mergetool "nvim"]
+;     path = nvim
+;     cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+; [difftool "vimdiff"]
+;     path = nvim
+[mergetool "nvim"]
+  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+# set "nvim" as tool for merging
+[merge]
+  tool = nvim
+# automatically launch merge tool without displaying a prompt
+[mergetool]
+  prompt = false

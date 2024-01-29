@@ -1,0 +1,21 @@
+# session X
+rename-session X
+
+select-window -t :1
+rename-window 'That Tiger'
+split-window -h
+split-window -v
+
+if-shell 'tmux select-window -t :2' '' 'new-window -t :2'
+rename-window -t :2 food
+
+if-shell 'tmux select-window -t :3' 'select-window -t :3' 'new-window -t :3'
+rename-window -t :3 code
+
+if-shell 'tmux select-window -t :4' 'select-window -t :4' 'new-window -t :4'
+rename-window -t :4 sleep
+
+if-shell 'tmux select-window -t :5' 'select-window -t :5' 'new-window -t :5'
+rename-window -t :5 game
+
+select-window -t 1
