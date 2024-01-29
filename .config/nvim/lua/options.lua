@@ -1,6 +1,6 @@
 vim.cmd("filetype plugin indent on")
 
-vim.g.python3_host_prog = '/home/tduchuy/Data/nvim-pyenv/bin/python3'
+vim.g.python3_host_prog = 'python/path/that/have/py-nvim/package'
 
 vim.cmd("syntax on")
 
