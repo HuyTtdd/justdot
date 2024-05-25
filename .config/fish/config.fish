@@ -80,20 +80,27 @@ function timg
 end
 
 function search
-    ag $argv[1] | fzf
+    rg -n -uu --no-column (string join " " $argv) | fzf
+end
+
+function yt-get
+    yt-dlp --extract-audio --format bestaudio "https://www.youtube.com/watch?v=$argv[1]"
+end
+
+function where
+    find ./ -name "$argv[1]"
 end
 
 if status --is-interactive
     set fish_color_valid_path
-
-    set -x EDITOR /usr/local/bin/nvim
+    set -x EDITOR /usr/bin/nvim
     set __fish_git_prompt_show_informative_status 1
 
     fish_vi_key_bindings
 
     load_world 'The Matrix'
 
-    alias nvim='/usr/local/bin/nvim'
+    alias nvim='/usr/bin/nvim'
 
     alias vim='nvim'
     alias vi='nvim'
@@ -104,13 +111,14 @@ if status --is-interactive
     alias ksmux="tmux kill-server"
     alias tbite="tmux new-session -t X -s T"
 
-    abbr --add --global install "sudo apt install"
-    abbr --add --global update "sudo apt update"
-    abbr --add --global upgrade "sudo apt upgrade"
-    abbr --add --global autoremove "sudo apt autoremove"
+    abbr --add --global install "sudo pamac install"
+    # abbr --add --global update "sudo apt update"
+    # abbr --add --global upgrade "sudo apt upgrade"
+    # abbr --add --global autoremove "sudo apt autoremove"
 
-    source ~/.aliases.fish
     source ~/.config/fish/functions/fish_user_key_bindings.fish
+
+    zoxide init fish | source
 
     loadenv
 end

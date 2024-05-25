@@ -7,15 +7,18 @@ lsp.on_attach(
     end
 )
 
-lsp.ensure_installed({
-  -- Replace these with whatever servers you want to install
-  'tsserver',
-  'pyright',
-  'clangd',
-  'cssls',
-  'emmet_language_server',
-  'html',
-  'lua_ls',
+require('mason-lspconfig').setup({
+    -- Replace these with whatever servers you want to install
+    ensure_installed = {
+        'tsserver',
+        'pyright',
+        'clangd',
+        'cssls',
+        'emmet_language_server',
+        'html',
+        'lua_ls',
+        'rust_analyzer',
+    },
 })
 
 require('lspconfig').tsserver.setup{}
@@ -27,6 +30,90 @@ require('lspconfig').lua_ls.setup{}
 require('lspconfig').html.setup{}
 require('lspconfig').jdtls.setup{}
 require('lspconfig').marksman.setup{}
+require('lspconfig').groovyls.setup{}
+require('lspconfig').rust_analyzer.setup{
+    settings = {
+        ["rust-analyzer"] = {
+            cachePriming = {
+                enable = false,
+            },
+            cargo = {
+                buildScripts = {
+                    enable = false,
+                },
+            },
+            checkOnSave = false,
+            check = {
+                allTargets = false,
+            },
+            diagnostics = {
+                enable = false,
+            },
+            inlayHints = {
+                bindingModeHints = {
+                    enable = false,
+                },
+                chainingHints = {
+                    enable = false,
+                },
+                closingBraceHints = {
+                    enable = false,
+                },
+                parameterHints = {
+                    enable = false,
+                },
+                typeHints = {
+                    enable = false,
+                },
+            },
+            lens = {
+                enable = false,
+            },
+            highlightRelated = {
+                references = {
+                    enable = false,
+                },
+                breakPoints = {
+                    enable = false,
+                },
+                closureCaptures = {
+                    enable = false,
+                },
+                exitPoints = {
+                    enable = false,
+                },
+                yieldPoints = {
+                    enable = false,
+                },
+            },
+            hover = {
+                actions = {
+                    enable = false,
+                },
+                links = {
+                    enable = false,
+                },
+                memoryLayout = {
+                    enable = false,
+                }
+            },
+            joinLines = {
+                joinAssignments = {
+                    enable = false,
+                },
+                joinElself = {
+                    enable = false,
+                },
+                removeTrailingComma = {
+                    enable = false,
+                },
+                unwrapTrivialBlock = {
+                    enable = false,
+                },
+            },
+        },
+    }
+}
 
 lsp.setup()
 
@@ -36,6 +123,7 @@ local cmp_select_opts = { behavior = cmp.SelectBehavior.Insert }
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
+    preselect = cmp.PreselectMode.None,
     sources = {
         {
             name = 'nvim_lsp'
@@ -72,4 +160,4 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
 })
 
-vim.diagnostic.disable()
+-- vim.diagnostic.enable(false)

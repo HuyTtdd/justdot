@@ -1,6 +1,6 @@
 vim.cmd("filetype plugin indent on")
 
-vim.g.python3_host_prog = 'python/path/that/have/py-nvim/package'
+vim.g.python3_host_prog = '/the/path/to/python3'
 
 vim.cmd("syntax on")
 
@@ -12,12 +12,14 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'yes'
 
-vim.opt.cursorline = false 
+vim.opt.cursorline = true
+vim.opt.cursorline = 'number'
 
 vim.opt.showmode = false
 vim.opt.encoding = "utf-8"
 vim.opt.scrolloff = 5
 vim.opt.splitright = true
+vim.opt.splitbelow = true
 vim.opt.showtabline = 2
 vim.opt.listchars = "eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣"
 
@@ -37,5 +39,7 @@ vim.opt.wildmenu = true
 
 vim.opt.wrap = true
 vim.opt.linebreak = true
+vim.opt.breakindent = true
+vim.opt.sbr = '~'
 
-vim.opt.guicursor = "i-ci:block,i-ci:blinkon250-blink0ff50,n:blinkon0"
+vim.opt.guicursor = "i-c:block,i-c:blinkon250-blink0ff50,n:blinkon0"

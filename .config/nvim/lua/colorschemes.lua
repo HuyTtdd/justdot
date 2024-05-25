@@ -34,7 +34,10 @@ require("catppuccin").setup({
         Visual = { bg = "#4a3a50" },
         Todo = { bg = colors.none, fg = colors.none, style = { "bold" } },
         BqfPreviewFloat = { bg = colors.none},
-		["@text.uri"] = { link = "Comment" },
+        RainbowDelimiterPink = { fg = colors.pink },
+        ["@text.uri"] = { link = "Comment" },
+        ColorColumn = { bg = colors.none },
+        ["@keyword.operator"] = { link = "Keyword" },
     }
 })
 
@@ -85,7 +88,7 @@ local custom_lualine_colors = {
     inactive = {
         a = { bg = colors.none, fg = colors.blue },
         b = { bg = colors.none, fg = colors.surface1, gui = "bold" },
-        c = { bg = colors.none, fg = colors.overlay0 },
+        c = { bg = colors.base, fg = colors.pink },
     },
 }
 
@@ -95,4 +98,7 @@ require("lualine").setup({
     }
 })
 
+-- There is something wrong here that cause me to change the background to something else before change it back to "dark"
+-- Too lazy to find a fix, so...
+vim.opt.background = "light"
 vim.opt.background = "dark"

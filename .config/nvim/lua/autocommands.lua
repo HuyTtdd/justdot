@@ -33,18 +33,18 @@ vim.api.nvim_create_autocmd(
     "FileType",
     {
         pattern="javascript.jsx",
-        command="setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2"
+        command="setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4"
     }
 )
 
 -- Markdown specific config
-vim.api.nvim_create_autocmd(
-    {"FileType"},
-    {
-        pattern="markdown",
-        command="setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2"
-    }
-)
+-- vim.api.nvim_create_autocmd(
+--     {"FileType"},
+--     {
+--         pattern="markdown",
+--         command="setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2"
+--     }
+-- )
 
 -- Json specific config
 vim.api.nvim_create_autocmd(
@@ -72,7 +72,7 @@ vim.api.nvim_create_autocmd(
         command="lua set_sql_abbr()"
     }
 )
-
+-- heheh, She told me that people use capslock for this
 function set_sql_abbr()
     vim.cmd{cmd='ia', args={'this', 'THIS'}}
     vim.cmd{cmd='ia', args={'add', 'ADD'}}
