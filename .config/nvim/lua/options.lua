@@ -13,7 +13,7 @@ vim.opt.relativenumber = true
 vim.opt.signcolumn = 'yes'
 
 vim.opt.cursorline = true
-vim.opt.cursorline = 'number'
+vim.opt.cursorlineopt = 'number'
 
 vim.opt.showmode = false
 vim.opt.encoding = "utf-8"

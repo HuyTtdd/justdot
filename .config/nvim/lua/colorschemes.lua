@@ -28,7 +28,7 @@ require("catppuccin").setup({
         NormalFloat = { fg = colors.text, bg = colors.none },
         FloatBorder = { fg = colors.pink, bg = colors.none },
         Pmenu = { bg = colors.none, fg = colors.overlay2 },
-		PmenuSel = { bg = "#4a3a50" },
+        PmenuSel = { bg = "#4a3a50" },
         PmenuSbar = { bg = colors.none },
         PmenuThumb = { bg = colors.none },
         Visual = { bg = "#4a3a50" },
