@@ -15,6 +15,21 @@ function fish_prompt
     printf '%s%s\n%s> ' (set_color green) (fish_git_prompt) (set_color "#cba6f7" --bold)
     set_color normal
 end
+ 
+function stamp --on-event fish_preexec
+    set prompt_length (math (string length $argv[1]) + 2)
+    if test $prompt_length -gt (tput cols)
+        set prompt_length (math $prompt_length - (tput cols))
+    end
+    set in_doubt_turn_right
+    for i in (seq $prompt_length)
+        set in_doubt_turn_right $in_doubt_turn_right "\x1b[C"
+    end
+    printf "\x1b[A"
+    printf (string join '' $in_doubt_turn_right)
+    printf " %s\n" (set_color "#cba6f7")
+    set_color normal
+end
 
 function fish_greeting
     set_color '#f4b8e4'
