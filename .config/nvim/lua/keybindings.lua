@@ -65,6 +65,16 @@ function rename_file()
 end
 vim.keymap.set('n', '<leader>rf', rename_file)
 
+-- Show hightlight groups for current token
+function syn_stack()
+    if (not vim.fn.exists('*synctack'))
+    then
+        return
+    end
+    print(vim.cmd('echo synIDattr(synID(line("."), col("."), 1), "name")'))
+end 
+vim.keymap.set('n', '<C-S>', syn_stack)
+
 -- Nvim's terminal
 -- Navigate windows from any mode
 vim.keymap.set('t', '<A-h>', '<C-\\><C-N><C-w>h', {silent=true})
@@ -89,6 +99,12 @@ end
 -- This support to be <C-/>, but I don't know why it not work sometime but <C-_> works. Just notice that it work or not depend on file type.
 -- You still press Ctrl + / on the keyboard.
 vim.keymap.set("n", "<C-_>", "gcc", {remap=true, silent=true})
-vim.keymap.set("v", "<C-_>", "gc", {remap=true, silent=true})
 vim.keymap.set("n", "<C-/>", "gcc", {remap=true, silent=true})
+vim.keymap.set("v", "<C-_>", "gc", {remap=true, silent=true})
 vim.keymap.set("v", "<C-/>", "gc", {remap=true, silent=true})
+
+-- Navigate logical line
+vim.keymap.set("n", "j", "gj", {silent=true})
+vim.keymap.set("n", "k", "gk", {silent=true})
+vim.keymap.set("v", "j", "gj", {silent=true})
+vim.keymap.set("v", "k", "gk", {silent=true})

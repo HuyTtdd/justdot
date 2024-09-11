@@ -37,15 +37,6 @@ vim.api.nvim_create_autocmd(
     }
 )
 
--- Markdown specific config
--- vim.api.nvim_create_autocmd(
---     {"FileType"},
---     {
---         pattern="markdown",
---         command="setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2"
---     }
--- )
-
 -- Json specific config
 vim.api.nvim_create_autocmd(
     "FileType",
@@ -73,7 +64,7 @@ vim.api.nvim_create_autocmd(
     }
 )
 -- heheh, She told me that people use capslock for this
-function set_sql_abbr()
+local function set_sql_abbr()
     vim.cmd{cmd='ia', args={'this', 'THIS'}}
     vim.cmd{cmd='ia', args={'add', 'ADD'}}
     vim.cmd{cmd='ia', args={'all', 'ALL'}}

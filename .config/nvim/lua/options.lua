@@ -12,8 +12,10 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'yes'
 
+-- This is cool but has performance drawback :(
+-- I still use it though
 vim.opt.cursorline = true
-vim.opt.cursorlineopt = 'number'
+vim.opt.cursorlineopt = "number"
 
 vim.opt.showmode = false
 vim.opt.encoding = "utf-8"

@@ -160,4 +160,4 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
 })
 
--- vim.diagnostic.enable(false)
+vim.diagnostic.enable(false)

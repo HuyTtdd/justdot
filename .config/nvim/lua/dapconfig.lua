@@ -44,6 +44,35 @@ dap.configurations.python = {
     },
 }
 
+local mason_registry = require("mason-registry")
+local codelldb = mason_registry.get_package("codelldb")
+local extension_path = codelldb:get_install_path() .. "/extension/"
+local codelldb_path = extension_path .. "adapter/codelldb"
+local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+
+dap.adapters.lldb = {
+  type = 'server',
+    port = "5001",
+    executable = {
+        command = codelldb_path,
+        args = { "--liblldb", liblldb_path, "--port", "5001" },
+    },
+  name = 'lldb'
+}
+
+dap.configurations.rust = {
+  {
+    name = 'Launch',
+    type = 'lldb',
+    request = 'launch',
+    program = function()
+        return vim.fn.getcwd() .. '/target/debug/' .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+  },
+}
+
 local dapui = require('dapui')
 dapui.setup()
 require('nvim-dap-virtual-text').setup()

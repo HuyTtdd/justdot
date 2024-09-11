@@ -25,6 +25,7 @@ require("catppuccin").setup({
         DiagnosticVirtualTextWarn = { bg = colors.none },
         DiagnosticVirtualTextInfo = { bg = colors.none },
         DiagnosticVirtualTextHint = { bg = colors.none },
+        DiagnosticUnnecessary = {},
         NormalFloat = { fg = colors.text, bg = colors.none },
         FloatBorder = { fg = colors.pink, bg = colors.none },
         Pmenu = { bg = colors.none, fg = colors.overlay2 },
@@ -52,42 +53,42 @@ local custom_lualine_colors = {
 
     insert = {
         a = { bg = colors.green, fg = colors.base, gui = "bold" },
-        b = { bg = colors.surface1, fg = colors.teal },
+        b = { bg = colors.surface1, fg = colors.pink },
         y = { bg = colors.surface1, fg = colors.pink },
         z = { bg = colors.pink, fg = colors.mantle },
     },
 
     terminal = {
         a = { bg = colors.green, fg = colors.base, gui = "bold" },
-        b = { bg = colors.surface1, fg = colors.teal },
+        b = { bg = colors.surface1, fg = colors.pink },
         y = { bg = colors.surface1, fg = colors.pink },
         z = { bg = colors.pink, fg = colors.mantle },
     },
 
     command = {
         a = { bg = colors.peach, fg = colors.base, gui = "bold" },
-        b = { bg = colors.surface1, fg = colors.peach },
+        b = { bg = colors.surface1, fg = colors.pink },
         y = { bg = colors.surface1, fg = colors.pink },
         z = { bg = colors.pink, fg = colors.mantle },
     },
 
     visual = {
         a = { bg = colors.mauve, fg = colors.base, gui = "bold" },
-        b = { bg = colors.surface1, fg = colors.mauve },
+        b = { bg = colors.surface1, fg = colors.pink },
         y = { bg = colors.surface1, fg = colors.pink },
         z = { bg = colors.pink, fg = colors.mantle },
     },
 
     replace = {
         a = { bg = colors.red, fg = colors.base, gui = "bold" },
-        b = { bg = colors.surface1, fg = colors.red },
+        b = { bg = colors.surface1, fg = colors.pink },
         y = { bg = colors.surface1, fg = colors.pink },
         z = { bg = colors.pink, fg = colors.mantle },
     },
 
     inactive = {
         a = { bg = colors.none, fg = colors.blue },
-        b = { bg = colors.none, fg = colors.surface1, gui = "bold" },
+        b = { bg = colors.none, fg = colors.surface1 },
         c = { bg = colors.base, fg = colors.pink },
     },
 }

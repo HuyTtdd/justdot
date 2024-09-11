@@ -24,8 +24,6 @@ require("lazy").setup {
     { "sindrets/diffview.nvim" },
     { "alexghergh/nvim-tmux-navigation" },
     { "kylechui/nvim-surround" },
-    { "m4xshen/autoclose.nvim" },
-    { "windwp/nvim-autopairs" },
     { "williamboman/mason.nvim" },
     { "williamboman/mason-lspconfig.nvim" },
     { "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
@@ -45,10 +43,16 @@ require("lazy").setup {
         dependencies = { "nvim-neotest/nvim-nio" }
     },
     { "theHamsta/nvim-dap-virtual-text"},
-    -- These are just for fun
+    -- These are just for fun | Nice to have
+    {"shortcuts/no-neck-pain.nvim", version = "*"},
+    {
+        'altermo/ultimate-autopair.nvim',
+        event={'InsertEnter','CmdlineEnter'},
+    },
+    { "sQVe/sort.nvim" },
     { "MeanderingProgrammer/markdown.nvim" },
     { "roobert/tabtree.nvim" },
-    { "hiphish/rainbow-delimiters.nvim" },
+    -- { "hiphish/rainbow-delimiters.nvim" },
     { "folke/twilight.nvim" },
     { "vidocqh/data-viewer.nvim" },
     { "eandrju/cellular-automaton.nvim" },
@@ -61,7 +65,7 @@ require("lazy").setup {
         version = "*",
     },
     -- AI shit
-    { "Exafunction/codeium.vim" },
+    -- { "Exafunction/codeium.vim" },
     {
         "GCBallesteros/jupytext.nvim",
         config = true,
@@ -80,10 +84,10 @@ require("lazy").setup {
 require("mason").setup({})
 
 -- Pairing stuff
-require("nvim-autopairs").setup({})
+require("ultimate-autopair").setup({})
 
 -- The fucking line
-function vim_columns()
+local function vim_columns()
     return vim.o.columns
 end
 
@@ -95,7 +99,7 @@ require("lualine").setup({
         always_show_tabs = true
     },
     sections = {
-        lualine_b = {}
+        lualine_b = {'branch'}
     },
     tabline = {
         lualine_c = {
@@ -187,31 +191,31 @@ require("gitsigns").setup({
 require("nvim-surround").setup()
 
 -- Look, it's RAINBOWWWWW, Wahhhhh
-local rainbow_delimiters = require 'rainbow-delimiters'
-require("rainbow-delimiters.setup").setup({
-    strategy = {
-        [""] = rainbow_delimiters.strategy["global"],
-        vim = rainbow_delimiters.strategy["local"],
-    },
-    query = {
-        [""] = "rainbow-delimiters",
-        lua = "rainbow-blocks",
-    },
-    priority = {
-        [""] = 110,
-        lua = 210,
-    },
-    highlight = {
-        "None",
-        "RainbowDelimiterPink",
-        "RainbowDelimiterYellow",
-        "RainbowDelimiterBlue",
-        "RainbowDelimiterOrange",
-        "RainbowDelimiterGreen",
-        "RainbowDelimiterViolet",
-        "RainbowDelimiterCyan",
-    },
-})
+-- local rainbow_delimiters = require 'rainbow-delimiters'
+-- require("rainbow-delimiters.setup").setup({
+--     strategy = {
+--         [""] = rainbow_delimiters.strategy["global"],
+--         vim = rainbow_delimiters.strategy["local"],
+--     },
+--     query = {
+--         [""] = "rainbow-delimiters",
+--         lua = "rainbow-blocks",
+--     },
+--     priority = {
+--         [""] = 110,
+--         lua = 210,
+--     },
+--     highlight = {
+--         "RainbowDelimiterWhite",
+--         "RainbowDelimiterPink",
+--         "RainbowDelimiterYellow",
+--         "RainbowDelimiterBlue",
+--         "RainbowDelimiterOrange",
+--         "RainbowDelimiterGreen",
+--         "RainbowDelimiterViolet",
+--         "RainbowDelimiterCyan",
+--     },
+-- })
 
 -- Tmux navigation
 require("nvim-tmux-navigation").setup({
@@ -221,9 +225,6 @@ vim.keymap.set("n", "<A-h>", ":NvimTmuxNavigateLeft<CR>", { noremap = true, sile
 vim.keymap.set("n", "<A-j>", ":NvimTmuxNavigateDown<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-k>", ":NvimTmuxNavigateUp<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-l>", ":NvimTmuxNavigateRight<CR>", { noremap = true, silent = true })
-
--- Auto close parenthesis -- Don't know why the fuck I need a plugin for this
-require("autoclose").setup()
 
 -- Treesitter
 require("nvim-treesitter.configs").setup({
@@ -292,8 +293,8 @@ require("bqf").setup({
         delay_syntax = 80,
         show_scroll_bar = false,
         show_title = false,
-        win_height = 12,
-        win_vheight = 12,
+        win_height = 30,
+        win_vheight = 30,
         winblend = 0,
         wrap = false
     },
@@ -409,8 +410,6 @@ require("screenkey").setup({
     },
 })
 
-require("screenkey").toggle()
-
 -- Markdown
 require("render-markdown").setup({
     markdown_query = [[
@@ -492,7 +491,16 @@ require("render-markdown").setup({
 })
 
 -- rustaceanvim
-vim.g.rustaceanvim = {
-    tools = {},
-    server = {cmd = {}, standalone = false},
-}
+-- vim.g.rustaceanvim = {
+--     tools = {},
+--     server = {cmd = {}, standalone = true},
+-- }
+
+-- Sort
+require("sort").setup()
+
+-- neck pain ???
+require("no-neck-pain").setup({
+    width = 150,
+    minSideBufferWidth = 20
+})
