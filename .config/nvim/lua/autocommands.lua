@@ -1,5 +1,14 @@
 -- Map file type
 auto_ft_grp = vim.api.nvim_create_augroup("AutoFtGrp", {clear = true})
+-- Note filetype
+vim.api.nvim_create_autocmd(
+    {"BufNew", "BufRead"},
+    {
+        pattern="note",
+        command="setlocal ft=markdown",
+        group=auto_ft_grp
+    }
+)
 -- Assembly filetype
 vim.api.nvim_create_autocmd(
     {"BufNew", "BufRead"},
@@ -63,6 +72,7 @@ vim.api.nvim_create_autocmd(
         command="lua set_sql_abbr()"
     }
 )
+
 -- heheh, She told me that people use capslock for this
 local function set_sql_abbr()
     vim.cmd{cmd='ia', args={'this', 'THIS'}}

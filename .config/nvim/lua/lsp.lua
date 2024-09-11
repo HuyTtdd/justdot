@@ -10,7 +10,7 @@ lsp.on_attach(
 require('mason-lspconfig').setup({
     -- Replace these with whatever servers you want to install
     ensure_installed = {
-        'tsserver',
+        'ts_ls',
         'pyright',
         'clangd',
         'cssls',
@@ -21,7 +21,7 @@ require('mason-lspconfig').setup({
     },
 })
 
-require('lspconfig').tsserver.setup{}
+require('lspconfig').ts_ls.setup{}
 require('lspconfig').pyright.setup{}
 require('lspconfig').clangd.setup{}
 require('lspconfig').cssls.setup{}

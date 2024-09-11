@@ -17,6 +17,9 @@ vim.opt.signcolumn = 'yes'
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 
+vim.opt.conceallevel = 0
+vim.opt.concealcursor = ""
+
 vim.opt.showmode = false
 vim.opt.encoding = "utf-8"
 vim.opt.scrolloff = 5
@@ -43,5 +46,7 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.sbr = '~'
+
+vim.cmd([[autocmd BufEnter * set formatoptions-=cr]])
 
 vim.opt.guicursor = "i-c:block,i-c:blinkon250-blink0ff50,n:blinkon0"

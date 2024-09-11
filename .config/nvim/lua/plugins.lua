@@ -1,14 +1,17 @@
 -- Reminder to myself: You are stupid so you didn't comment what option do what
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -33,7 +36,7 @@ require("lazy").setup {
     { "L3MON4D3/LuaSnip" },
     { "kevinhwang91/nvim-bqf" },
     { "rmagatti/auto-session" },
-    { "rrethy/vim-hexokinase" },
+    { "NvChad/nvim-colorizer.lua" },
     { "nvim-tree/nvim-web-devicons" },
     { "nvim-lua/plenary.nvim" },
     -- dap
@@ -44,7 +47,9 @@ require("lazy").setup {
     },
     { "theHamsta/nvim-dap-virtual-text"},
     -- These are just for fun | Nice to have
-    {"shortcuts/no-neck-pain.nvim", version = "*"},
+    { "jiaoshijie/undotree" },
+    { "hedyhli/outline.nvim" },
+    { "shortcuts/no-neck-pain.nvim", version = "*" },
     {
         'altermo/ultimate-autopair.nvim',
         event={'InsertEnter','CmdlineEnter'},
@@ -52,12 +57,10 @@ require("lazy").setup {
     { "sQVe/sort.nvim" },
     { "MeanderingProgrammer/markdown.nvim" },
     { "roobert/tabtree.nvim" },
-    -- { "hiphish/rainbow-delimiters.nvim" },
     { "folke/twilight.nvim" },
     { "vidocqh/data-viewer.nvim" },
     { "eandrju/cellular-automaton.nvim" },
     { "jbyuki/nabla.nvim" },
-    { "HakonHarnes/img-clip.nvim" },
     { "echasnovski/mini.indentscope", version = false },
     { "atinylittleshell/comment-repl.nvim", opts = {} },
     {
@@ -66,19 +69,12 @@ require("lazy").setup {
     },
     -- AI shit
     -- { "Exafunction/codeium.vim" },
-    {
-        "GCBallesteros/jupytext.nvim",
-        config = true,
-        lazy=false,
-    },
-    -- Temporary rust stuff 
     -- {
-    --   'mrcjkb/rustaceanvim',
-    --   version = '^4',
-    --   lazy = false,
-    -- }
+    --     "GCBallesteros/jupytext.nvim",
+    --     config = true,
+    --     lazy=false,
+    -- },
 }
-
 
 -- mason
 require("mason").setup({})
@@ -109,6 +105,7 @@ require("lualine").setup({
                 mode = 2,
                 max_length = vim_columns,
                 tabs_color = {
+                    -- active = { bg = "#494d64", fg = "#f9cded", gui = "bold" },
                     active = { bg = "#8e718b", fg = "#f9cded", gui = "bold" },
                     inactive = { fg = "#f9cded" }
                 },
@@ -123,7 +120,7 @@ require("lualine").setup({
 require("fzf-lua").setup({
     winopts = {
         preview = {
-            scroll_bar = false,
+            scrollbar = false
         }
     },
     files = {
@@ -190,32 +187,13 @@ require("gitsigns").setup({
 -- Nvim surround
 require("nvim-surround").setup()
 
--- Look, it's RAINBOWWWWW, Wahhhhh
--- local rainbow_delimiters = require 'rainbow-delimiters'
--- require("rainbow-delimiters.setup").setup({
---     strategy = {
---         [""] = rainbow_delimiters.strategy["global"],
---         vim = rainbow_delimiters.strategy["local"],
---     },
---     query = {
---         [""] = "rainbow-delimiters",
---         lua = "rainbow-blocks",
---     },
---     priority = {
---         [""] = 110,
---         lua = 210,
---     },
---     highlight = {
---         "RainbowDelimiterWhite",
---         "RainbowDelimiterPink",
---         "RainbowDelimiterYellow",
---         "RainbowDelimiterBlue",
---         "RainbowDelimiterOrange",
---         "RainbowDelimiterGreen",
---         "RainbowDelimiterViolet",
---         "RainbowDelimiterCyan",
---     },
--- })
+-- COLORRRRR
+require("colorizer").setup {
+    user_default_options = {
+        mode = "virtualtext",
+        virtualtext = "■",
+    },
+}
 
 -- Tmux navigation
 require("nvim-tmux-navigation").setup({
@@ -403,104 +381,89 @@ require("screenkey").setup({
         border = "single",
     },
     compress_after = 3,
-    clear_after = 0,
+    clear_after = 1000,
     disable = {
         filetypes = {},
         buftypes = {},
+    },
+    show_leader = false,
+    group_mappings = false,
+    display_infront = {},
+    display_behind = {},
+    keys = {
+        ["<TAB>"] = "󰌒",
+        ["<CR>"] = "󰌑",
+        ["<ESC>"] = "<Esc>",
+        ["<SPACE>"] = "␣",
+        ["<BS>"] = "󰌥",
+        ["<DEL>"] = "<Del>",
+        ["<LEFT>"] = "",
+        ["<RIGHT>"] = "",
+        ["<UP>"] = "",
+        ["<DOWN>"] = "",
+        ["<HOME>"] = "<Home>",
+        ["<END>"] = "<End>",
+        ["<PAGEUP>"] = "<PgUp>",
+        ["<PAGEDOWN>"] = "<PgDn>",
+        ["<INSERT>"] = "<Ins>",
+        ["<F1>"] = "<F1>",
+        ["<F2>"] = "<F2>",
+        ["<F3>"] = "<F3>",
+        ["<F4>"] = "<F4>",
+        ["<F5>"] = "<F5>",
+        ["<F6>"] = "<F6>",
+        ["<F7>"] = "<F7>",
+        ["<F8>"] = "<F8>",
+        ["<F9>"] = "<F9>",
+        ["<F10>"] = "<F10>",
+        ["<F11>"] = "<F11>",
+        ["<F12>"] = "<F12>",
+        ["CTRL"] = "<Ctrl>",
+        ["ALT"] = "<Alt>",
+        ["SUPER"] = "<Super>",
+        ["<leader>"] = "<leader>",
     },
 })
 
 -- Markdown
 require("render-markdown").setup({
-    markdown_query = [[
-        (atx_heading [
-            (atx_h1_marker)
-            (atx_h2_marker)
-            (atx_h3_marker)
-            (atx_h4_marker)
-            (atx_h5_marker)
-            (atx_h6_marker)
-        ] @heading)
-
-        (thematic_break) @dash
-
-        (fenced_code_block) @code
-
-        [
-            (list_marker_plus)
-            (list_marker_minus)
-            (list_marker_star)
-        ] @list_marker
-
-        (task_list_marker_unchecked) @checkbox_unchecked
-        (task_list_marker_checked) @checkbox_checked
-
-        (block_quote (block_quote_marker) @quote_marker)
-        (block_quote (paragraph (inline (block_continuation) @quote_marker)))
-
-        (pipe_table) @table
-        (pipe_table_header) @table_head
-        (pipe_table_delimiter_row) @table_delim
-        (pipe_table_row) @table_row
-    ]],
-    inline_query = [[
-        (code_span) @code
-    ]],
-    log_level = "error",
-    file_types = { "markdown" },
-    render_modes = { "n", "c" },
-    headings = { "#1 ", "#2 ", "#3 ", "#4 ", "#5 ", "#6 " },
-    dash = "—",
-    bullets = { "●", "○", "◆", "◇" },
-    checkbox = {
-        unchecked = "󰄱 ",
-        checked = " ",
-    },
-    quote = "┃",
-    conceal = {
-        default = vim.opt.conceallevel:get(),
-        rendered = 3,
-    },
-    fat_tables = true,
-    highlights = {
-        heading = {
-            backgrounds = { "DiffAdd", "DiffChange", "DiffDelete" },
-            foregrounds = {
-                "markdownH1",
-                "markdownH2",
-                "markdownH3",
-                "markdownH4",
-                "markdownH5",
-                "markdownH6",
-            },
+    win_options = {
+        conceallevel = {
+            default = vim.api.nvim_get_option_value('conceallevel', {}),
+            rendered = 1,
         },
-        dash = "LineNr",
-        code = "ColorColumn",
-        bullet = "Normal",
-        checkbox = {
-            unchecked = "@markup.list.unchecked",
-            checked = "@markup.heading",
-        },
-        table = {
-            head = "@markup.heading",
-            row = "Normal",
-        },
-        latex = "@markup.math",
-        quote = "@markup.quote",
+        concealcursor = {
+            default = vim.api.nvim_get_option_value('concealcursor', {}),
+            rendered = "",
+        };
     },
+    code = {
+        above = "",
+        below = "",
+    }
 })
-
--- rustaceanvim
--- vim.g.rustaceanvim = {
---     tools = {},
---     server = {cmd = {}, standalone = true},
--- }
 
 -- Sort
 require("sort").setup()
 
--- neck pain ???
+-- My neck
 require("no-neck-pain").setup({
     width = 150,
-    minSideBufferWidth = 20
 })
+
+-- Outline
+require("outline").setup({
+    outline_window = {
+        position = "left",
+        auto_jump = true,
+        show_cursorline = true,
+    }
+})
+
+-- Undotree
+require("undotree").setup({
+    float_diff = true,
+    layout = "left_bottom",
+    position = "left",
+})
+vim.keymap.set("n", "<leader>u", ":lua require('undotree').toggle()<cr>", { noremap = true, silent = true })

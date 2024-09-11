@@ -39,6 +39,7 @@ require("catppuccin").setup({
         ["@text.uri"] = { link = "Comment" },
         ColorColumn = { bg = colors.none },
         ["@keyword.operator"] = { link = "Keyword" },
+        RenderMarkdownCode = { bg = colors.none },
     }
 })
 
