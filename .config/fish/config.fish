@@ -7,7 +7,7 @@ function fish_prompt
     end
 
     if test (count $_pwd) -eq 1
-        printf '%s%s' (set_color "#f5e0dc" --bold) $_pwd[1]
+        printf '%s%s' (set_color "#cba6f7" --bold) $_pwd[1]
     else
         printf '%s%s%s/%s' (set_color "#cba6f7" --dim) $_pwd[1] (set_color --bold) $_pwd[2]
     end
@@ -15,7 +15,7 @@ function fish_prompt
     printf '%s%s\n%s> ' (set_color green) (fish_git_prompt) (set_color "#cba6f7" --bold)
     set_color normal
 end
- 
+
 function stamp --on-event fish_preexec
     set prompt_length (math (string length $argv[1]) + 2)
     if test $prompt_length -gt (tput cols)
@@ -33,7 +33,9 @@ end
 
 function fish_greeting
     set_color '#f4b8e4'
-    echo '*** VSCode is the best IDE ***'
+    # echo '*** VSCode is the best IDE ***'
+    # echo -e "Why Sublime Text, though? Is Vintage mode enabled?\nShould I ask her?" | fortune-cat -p 0 -cp 0.75 -gp 0
+    echo -e "Not a chance, B!tch." | fortune-cat -p 0 -cp 0.75 -gp 0
     set_color normal
 end
 
@@ -121,10 +123,9 @@ if status --is-interactive
     alias vi='nvim'
     alias py='python3'
 
-    alias tmux="systemd-run --scope --user tmux"
+    # alias tmux="systemd-run --scope --user tmux"
     alias ltmux="tmux list-sessions"
     alias ksmux="tmux kill-server"
-    alias tbite="tmux new-session -t X -s T"
 
     abbr --add --global install "sudo pamac install"
     # abbr --add --global update "sudo apt update"
@@ -133,7 +134,7 @@ if status --is-interactive
 
     source ~/.config/fish/functions/fish_user_key_bindings.fish
 
-    zoxide init fish | source
+    zoxide init fish --cmd cd | source
 
     loadenv
 end

@@ -1,21 +1,31 @@
 # session X
-rename-session X
+rename-session T
 
 select-window -t :1
-rename-window 'That Tiger'
-split-window -h
-split-window -v
+rename-window 'Now'
+if-shell 'tmux select-pane -t 2' '' 'split-window -h'
+if-shell 'tmux select-pane -t 3' '' 'split-window -v'
 
 if-shell 'tmux select-window -t :2' '' 'new-window -t :2'
-rename-window -t :2 food
+rename-window -t :2 I
 
 if-shell 'tmux select-window -t :3' 'select-window -t :3' 'new-window -t :3'
-rename-window -t :3 code
+rename-window -t :3 know
 
 if-shell 'tmux select-window -t :4' 'select-window -t :4' 'new-window -t :4'
-rename-window -t :4 sleep
+rename-window -t :4 that
 
 if-shell 'tmux select-window -t :5' 'select-window -t :5' 'new-window -t :5'
-rename-window -t :5 game
+rename-window -t :5 I
+
+if-shell 'tmux select-window -t :6' 'select-window -t :6' 'new-window -t :6'
+rename-window -t :6 "don't"
+
+if-shell 'tmux select-window -t :7' 'select-window -t :7' 'new-window -t :7'
+rename-window -t :7 deserve
+
+if-shell 'tmux select-window -t :8' 'select-window -t :8' 'new-window -t :8'
+rename-window -t :8 anything
 
 select-window -t 1
+select-pane -t 1
