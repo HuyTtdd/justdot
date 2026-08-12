@@ -73,6 +73,14 @@ vim.api.nvim_create_autocmd(
     }
 )
 
+-- No comment on new line
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = function()
+        vim.opt.formatoptions:remove({ "c", "r" })
+    end,
+})
+
 -- heheh, She told me that people use capslock for this
 local function set_sql_abbr()
     vim.cmd{cmd='ia', args={'this', 'THIS'}}

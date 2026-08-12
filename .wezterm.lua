@@ -1,6 +1,6 @@
 local wezterm = require 'wezterm';
 return {
-    enable_wayland = true,
+    enable_wayland = false,
     audible_bell = "Disabled";
     warn_about_missing_glyphs = false,
     font = wezterm.font_with_fallback({

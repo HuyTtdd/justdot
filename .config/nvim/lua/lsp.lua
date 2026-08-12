@@ -1,14 +1,4 @@
-local lsp = require('lsp-zero').preset({})
-
--- Setup lsp server
-lsp.on_attach(
-    function(client, bufnr)
-        -- Look at me. I'm useless.
-    end
-)
-
 require('mason-lspconfig').setup({
-    -- Replace these with whatever servers you want to install
     ensure_installed = {
         'ts_ls',
         'pyright',
@@ -19,144 +9,77 @@ require('mason-lspconfig').setup({
         'lua_ls',
         'rust_analyzer',
     },
+    handlers = {
+        function(server_name)
+            vim.lsp.config(server_name, {})
+            vim.lsp.enable(server_namer)
+        end,
+    }
 })
 
-require('lspconfig').ts_ls.setup{}
-require('lspconfig').pyright.setup{}
-require('lspconfig').clangd.setup{}
-require('lspconfig').cssls.setup{}
-require('lspconfig').emmet_language_server.setup{}
-require('lspconfig').lua_ls.setup{}
-require('lspconfig').html.setup{}
-require('lspconfig').jdtls.setup{}
-require('lspconfig').marksman.setup{}
-require('lspconfig').groovyls.setup{}
-require('lspconfig').rust_analyzer.setup{
-    settings = {
-        ["rust-analyzer"] = {
-            cachePriming = {
-                enable = false,
-            },
-            cargo = {
-                buildScripts = {
-                    enable = false,
-                },
-            },
-            checkOnSave = false,
-            check = {
-                allTargets = false,
-            },
-            diagnostics = {
-                enable = false,
-            },
-            inlayHints = {
-                bindingModeHints = {
-                    enable = false,
-                },
-                chainingHints = {
-                    enable = false,
-                },
-                closingBraceHints = {
-                    enable = false,
-                },
-                parameterHints = {
-                    enable = false,
-                },
-                typeHints = {
-                    enable = false,
-                },
-            },
-            lens = {
-                enable = false,
-            },
-            highlightRelated = {
-                references = {
-                    enable = false,
-                },
-                breakPoints = {
-                    enable = false,
-                },
-                closureCaptures = {
-                    enable = false,
-                },
-                exitPoints = {
-                    enable = false,
-                },
-                yieldPoints = {
-                    enable = false,
-                },
-            },
-            hover = {
-                actions = {
-                    enable = false,
-                },
-                links = {
-                    enable = false,
-                },
-                memoryLayout = {
-                    enable = false,
-                }
-            },
-            joinLines = {
-                joinAssignments = {
-                    enable = false,
-                },
-                joinElself = {
-                    enable = false,
-                },
-                removeTrailingComma = {
-                    enable = false,
-                },
-                unwrapTrivialBlock = {
-                    enable = false,
-                },
-            },
+require("blink.cmp").setup({
+    keymap = {
+        preset = "none",
+        ["<Tab>"] = {
+            function(cmp)
+                if cmp.is_visible() then
+                    return cmp.select_next()
+                elseif vim.snippet.active({ direction = 1 }) then
+                    return vim.snippet.jump(1)
+                end
+            end,
+            "fallback",
         },
-    }
-}
 
-lsp.setup()
-
--- Completion mapping
-local cmp = require('cmp')
-local cmp_select_opts = { behavior = cmp.SelectBehavior.Insert }
-local cmp_action = require('lsp-zero').cmp_action()
-
-cmp.setup({
-    preselect = cmp.PreselectMode.None,
+        ["<S-Tab>"] = {
+            function(cmp)
+                if cmp.is_visible() then
+                    return cmp.select_prev()
+                elseif vim.snippet.active({ direction = -1 }) then
+                    return vim.snippet.jump(-1)
+                end
+            end,
+            "fallback",
+        },
+    },
     sources = {
-        {
-            name = 'nvim_lsp'
+        default = { "lsp", "path", "buffer" },
+    },
+    completion = {
+        keyword = { range = "prefix", },
+        list = { 
+            selection = { preselect = false, auto_insert = true },
+            cycle = {
+                from_bottom = false,
+                from_top = false,
+            },
         },
-    },
-    mapping = {
-        ['<CR>'] = cmp.mapping.confirm({ select = false }),
-        ['<C-j>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-k>'] = cmp.mapping.scroll_docs(4),
-        ['<Tab>'] = cmp_action.tab_complete(),
-        ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
-    },
-    window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
+        menu = {
+            scrollbar = false,
+            draw = {
+                align_to = "cursor",
+            },
+        },
+        ghost_text = { enabled = false },
     },
 })
 
 -- LSP action mapping
 vim.api.nvim_create_autocmd('LspAttach', {
-    desc = 'LSP actions',
     callback = function(event)
         local opts = { buffer = event.buf }
 
-        vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-        vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-        vim.keymap.set('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-        vim.keymap.set({'n', 'x'}, '<leader>f', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+        vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+        vim.keymap.set({'n', 'x'}, '<leader>f', function()
+            vim.lsp.buf.format({async = true})
+        end, opts)
     end
 })
 

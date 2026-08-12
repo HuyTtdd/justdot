@@ -1,19 +1,17 @@
 vim.cmd("filetype plugin indent on")
 
-vim.g.python3_host_prog = '/the/path/to/python3'
+vim.g.python3_host_prog = '/usr/bin/python3'
 
 vim.cmd("syntax on")
 
-vim.opt.diffopt = vim.opt.diffopt + "vertical"
-
 vim.opt.mouse = ''
+
+vim.opt.termguicolors = true
 
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'yes'
 
--- This is cool but has performance drawback :(
--- I still use it though
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 
@@ -30,6 +28,7 @@ vim.opt.listchars = "eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣"
 
 local indent = 4
 vim.opt.autoindent = true
+vim.opt.smartindent = true
 vim.opt.expandtab = true
 vim.opt.tabstop = indent
 vim.opt.softtabstop = indent
@@ -47,6 +46,9 @@ vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.sbr = '~'
 
-vim.cmd([[autocmd BufEnter * set formatoptions-=cr]])
-
 vim.opt.guicursor = "i-c:block,i-c:blinkon250-blink0ff50,n:blinkon0"
+
+vim.opt.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+vim.opt.winborder = "single"
+vim.go.pumborder = "single"

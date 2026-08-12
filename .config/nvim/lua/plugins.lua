@@ -19,33 +19,24 @@ require("lazy").setup {
     -- These are neccessary for my flow
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
     { "nvim-treesitter/nvim-treesitter" },
+    { "nvim-tree/nvim-web-devicons" },
     { "nvim-lualine/lualine.nvim" },
     { "ibhagwan/fzf-lua" },
     { "nvim-tree/nvim-tree.lua" },
     { "lewis6991/gitsigns.nvim" },
     { "tpope/vim-fugitive" },
-    { "sindrets/diffview.nvim" },
+    { "dlyongemallo/diffview-plus.nvim" },
     { "alexghergh/nvim-tmux-navigation" },
     { "kylechui/nvim-surround" },
     { "williamboman/mason.nvim" },
     { "williamboman/mason-lspconfig.nvim" },
-    { "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
     { "neovim/nvim-lspconfig" },
-    { "hrsh7th/cmp-nvim-lsp" },
-    { "hrsh7th/nvim-cmp" },
-    { "L3MON4D3/LuaSnip" },
-    { "kevinhwang91/nvim-bqf" },
+    { "rafamadriz/friendly-snippets" },
+    { "saghen/blink.cmp", version = "1.*" },
+    { "stevearc/quicker.nvim", ft = "qf" },
     { "rmagatti/auto-session" },
-    { "NvChad/nvim-colorizer.lua" },
-    { "nvim-tree/nvim-web-devicons" },
-    { "nvim-lua/plenary.nvim" },
-    -- dap
-    { "mfussenegger/nvim-dap" },
-    {
-        "rcarriga/nvim-dap-ui",
-        dependencies = { "nvim-neotest/nvim-nio" }
-    },
-    { "theHamsta/nvim-dap-virtual-text"},
+    { "catgoose/nvim-colorizer.lua" },
+
     -- These are just for fun | Nice to have
     { "jiaoshijie/undotree" },
     { "hedyhli/outline.nvim" },
@@ -55,34 +46,30 @@ require("lazy").setup {
         event={'InsertEnter','CmdlineEnter'},
     },
     { "sQVe/sort.nvim" },
-    { "MeanderingProgrammer/markdown.nvim" },
+    { "MeanderingProgrammer/render-markdown.nvim" },
     { "roobert/tabtree.nvim" },
     { "folke/twilight.nvim" },
-    { "vidocqh/data-viewer.nvim" },
     { "eandrju/cellular-automaton.nvim" },
-    { "jbyuki/nabla.nvim" },
     { "echasnovski/mini.indentscope", version = false },
     { "atinylittleshell/comment-repl.nvim", opts = {} },
     {
         "NStefan002/screenkey.nvim",
         version = "*",
     },
-    -- AI shit
-    -- { "Exafunction/codeium.vim" },
-    -- {
-    --     "GCBallesteros/jupytext.nvim",
-    --     config = true,
-    --     lazy=false,
-    -- },
 }
 
--- mason
-require("mason").setup({})
+-- Treesitter
+local ts = require("nvim-treesitter")
+ts.setup()
 
--- Pairing stuff
-require("ultimate-autopair").setup({})
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        pcall(vim.treesitter.start)
+    end,
+})
 
--- The fucking line
+-- Lualine
 local function vim_columns()
     return vim.o.columns
 end
@@ -105,8 +92,7 @@ require("lualine").setup({
                 mode = 2,
                 max_length = vim_columns,
                 tabs_color = {
-                    -- active = { bg = "#494d64", fg = "#f9cded", gui = "bold" },
-                    active = { bg = "#8e718b", fg = "#f9cded", gui = "bold" },
+                    active = { bg = "#494d64", fg = "#f9cded", gui = "bold" },
                     inactive = { fg = "#f9cded" }
                 },
                 section_separators = { left = "", right = "" },
@@ -131,7 +117,7 @@ require("fzf-lua").setup({
 })
 vim.keymap.set("n", "<C-p>", ":FzfLua files<CR>", { noremap = true, silent = true })
 
--- The fucking tree
+-- Nvim Tree
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -172,7 +158,7 @@ require("nvim-tree").setup({
 })
 vim.keymap.set("n", "<C-b>", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 
--- To show the git thingy
+-- Gitsigns
 require("gitsigns").setup({
     signs = {
         add          = { text = "+" },
@@ -184,16 +170,21 @@ require("gitsigns").setup({
     }
 })
 
--- Nvim surround
-require("nvim-surround").setup()
-
--- COLORRRRR
-require("colorizer").setup {
-    user_default_options = {
-        mode = "virtualtext",
-        virtualtext = "■",
-    },
-}
+-- Diffview
+require("diffview").setup({
+  enhanced_diff_hl = true,
+  use_icons = true,
+  view = {
+    default = { layout = "diff2_horizontal" },
+    merge_tool = { layout = "diff3_horizontal" },
+  },
+  file_panel = {
+    listing_style = "tree",
+    win_config = { position = "left", width = 35 }, -- Use "auto" to fit content
+  },
+  hooks = {},   -- See :h diffview-config-hooks
+  keymaps = {}, -- See :h diffview-config-keymaps
+})
 
 -- Tmux navigation
 require("nvim-tmux-navigation").setup({
@@ -204,114 +195,94 @@ vim.keymap.set("n", "<A-j>", ":NvimTmuxNavigateDown<CR>", { noremap = true, sile
 vim.keymap.set("n", "<A-k>", ":NvimTmuxNavigateUp<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-l>", ":NvimTmuxNavigateRight<CR>", { noremap = true, silent = true })
 
--- Treesitter
-require("nvim-treesitter.configs").setup({
-    ensure_installed = { "c", "lua", "vim", "vimdoc", "python", "javascript" },
-    highlight = {
-        enable = true
+-- Nvim surround
+require("nvim-surround").setup()
+
+-- mason
+require("mason").setup({})
+
+-- Quickfix window
+local quicker = require("quicker")
+quicker.setup({
+    keys = {
+        {
+            ">",
+            function()
+                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+            end,
+            desc = "Expand quickfix context",
+        },
+        {
+            "<",
+            function()
+                require("quicker").collapse()
+            end,
+            desc = "Collapse quickfix context",
+        },
     },
-    indent = {
-        enable = true,
+})
+
+vim.keymap.set("n", "<leader>q", function()
+    quicker.toggle()
+end)
+
+vim.keymap.set("n", "<leader>l", function()
+    quicker.toggle({ loclist = true })
+end)
+
+-- Auto session
+require("auto-session").setup({
+    suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+})
+
+-- Colorizer
+require("colorizer").setup()
+
+-- Undotree
+require("undotree").setup({
+    float_diff = true,
+    layout = "left_bottom",
+    position = "left",
+})
+
+vim.keymap.set("n", "<leader>u", ":lua require('undotree').toggle()<cr>", { noremap = true, silent = true })
+
+-- Outline
+require("outline").setup({
+    outline_window = {
+        position = "left",
+        auto_jump = true,
+        show_cursorline = true,
     }
 })
 
--- Quickfix window
--- Funny that I have to disable every keymaps of this plugin
-require("bqf").setup({
-    auto_enable = true,
-    auto_resize_height = true,
-    filter = {
-        fzf = {
-            action_for = {
-                [""] = "closeall",
-                [""] = "signtoggle",
-                [""] = "split",
-                [""] = "tab drop",
-                [""] = "vsplit",
-                [""] = "split"
-            },
-            extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " }
-        }
-    },
-    func_map = {
-        drop = "<CR>",
-        filter = "",
-        filterr = "",
-        fzffilter = "",
-        lastleave = "",
-        nextfile = "",
-        nexthist = "",
-        open = "",
-        openc = "",
-        prevfile = "",
-        prevhist = "",
-        pscrolldown = "",
-        pscrollorig = "",
-        pscrollup = "",
-        ptoggleauto = "",
-        ptoggleitem = "",
-        ptogglemode = "",
-        sclear = "",
-        split = "",
-        stogglebuf = "",
-        stoggledown = "",
-        stoggleup = "",
-        stogglevm = "",
-        tab = "",
-        tabb = "",
-        tabc = "<C-CR>",
-        tabdrop = "",
-        vsplit = ""
-    },
-    magic_window = true,
-    preview = {
-        auto_preview = true,
-        border = "rounded",
-        buf_label = true,
-        delay_syntax = 80,
-        show_scroll_bar = false,
-        show_title = false,
-        win_height = 30,
-        win_vheight = 30,
-        winblend = 0,
-        wrap = false
-    },
-    previous_winid_ft_skip = {}
+-- No neck pain
+require("no-neck-pain").setup({
+    width = 150,
 })
 
--- Session sesssion session SESSION SEEEESSION sdkfjaslkdfj
-require("auto-session").setup({
-    auto_session_enabled = true,
-    auto_save_enabled = true,
-    auto_restore_enabled = true,
-    log_level = "error",
-    auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-})
+-- Pairing stuff
+require("ultimate-autopair").setup({})
 
--- texmath
-vim.keymap.set('n', '<leader>m', ':lua require("nabla").popup()<CR>', {noremap=true, silent=true})
+-- Sort
+require("sort").setup()
 
--- twilight
-require("twilight").setup({
-    dimming = {
-        alpha = 0.7,
-        term_bg = "#000000",
-        inactive = true,
-      },
-      context = 20,
-      treesitter = true,
-      expand = {
-        "function_definition",
-        "method_definition",
-        "decorated_definition",
-      },
-      exclude = {},
-})
-
--- Indent line go bruhhhh
-require('mini.indentscope').setup({
-    draw = {
-        delay = 250,
+-- Markdown
+require("render-markdown").setup({
+    win_options = {
+        conceallevel = {
+            default = vim.o.conceallevel,
+            rendered = 1,
+        },
+        concealcursor = {
+            default = vim.o.concealcursor,
+            rendered = "",
+        },
+    },
+    code = {
+        sign = false,
+        width = "normal",
+        style = "none",
     }
 })
 
@@ -371,6 +342,30 @@ require('tabtree').setup({
     },
 })
 
+-- Twilight
+require("twilight").setup({
+    dimming = {
+        alpha = 0.7,
+        term_bg = "#000000",
+        inactive = true,
+      },
+      context = 20,
+      treesitter = true,
+      expand = {
+        "function_definition",
+        "method_definition",
+        "decorated_definition",
+      },
+      exclude = {},
+})
+
+-- Indent line
+require('mini.indentscope').setup({
+    draw = {
+        delay = 250,
+    }
+})
+
 -- Screenkey
 require("screenkey").setup({
     win_opts = {
@@ -424,46 +419,3 @@ require("screenkey").setup({
         ["<leader>"] = "<leader>",
     },
 })
-
--- Markdown
-require("render-markdown").setup({
-    win_options = {
-        conceallevel = {
-            default = vim.api.nvim_get_option_value('conceallevel', {}),
-            rendered = 1,
-        },
-        concealcursor = {
-            default = vim.api.nvim_get_option_value('concealcursor', {}),
-            rendered = "",
-        };
-    },
-    code = {
-        above = "",
-        below = "",
-    }
-})
-
--- Sort
-require("sort").setup()
-
--- My neck
-require("no-neck-pain").setup({
-    width = 150,
-})
-
--- Outline
-require("outline").setup({
-    outline_window = {
-        position = "left",
-        auto_jump = true,
-        show_cursorline = true,
-    }
-})
-
--- Undotree
-require("undotree").setup({
-    float_diff = true,
-    layout = "left_bottom",
-    position = "left",
-})
-vim.keymap.set("n", "<leader>u", ":lua require('undotree').toggle()<cr>", { noremap = true, silent = true })

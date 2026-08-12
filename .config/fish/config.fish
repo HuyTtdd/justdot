@@ -127,11 +127,6 @@ if status --is-interactive
     alias ltmux="tmux list-sessions"
     alias ksmux="tmux kill-server"
 
-    abbr --add --global install "sudo pamac install"
-    # abbr --add --global update "sudo apt update"
-    # abbr --add --global upgrade "sudo apt upgrade"
-    # abbr --add --global autoremove "sudo apt autoremove"
-
     source ~/.config/fish/functions/fish_user_key_bindings.fish
 
     zoxide init fish --cmd cd | source
